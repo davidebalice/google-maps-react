@@ -1,5 +1,12 @@
 .App {
-  text-align: center;
+  width: 100vw;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.map-container {
+  width: 100%;
+  height: calc(100% - 100px);
 }
 
 .App-logo {
@@ -34,5 +41,36 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 1201px) {
+  .colMap {
+    width: 80%;
+  }
+
+  .colAccommodations {
+    width: 20%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .colMap {
+    width: 70%;
+  }
+
+  .colAccommodations {
+    width: 30%;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .colMap {
+    width: 100%;
+  }
+
+  .colAccommodations {
+    width: 100%;
   }
 }
