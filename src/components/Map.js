@@ -6,6 +6,8 @@ import {
 } from "@react-google-maps/api";
 import { useState, useEffect } from "react";
 import "../App.css";
+import Search from "../components/Search";
+import Info from "../components/Info";
 import Accommodations from "../components/Accommodations";
 import { markers } from "../data/markers";
 
@@ -16,22 +18,23 @@ const Map = () => {
   const [map, setMap] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [infoWindowData, setInfoWindowData] = useState();
-  const [zoom, setZoom] = useState(10);
+  const [zoom, setZoom] = useState(11);
   const [searchQuery, setSearchQuery] = useState("");
   const [startSearch, setStartSearch] = useState(false);
   const [startPosition, setStartPosition] = useState({
-    title: "hotel",
+    title: "",
     address: "Rome",
     photo: null,
     lat: 41.9027835,
     lng: 12.4963655,
   });
   const [searchResult, setSearchResult] = useState({
-    title: "hotel",
-    address: "Rome",
+    title: "",
+    address: "",
     photo: null,
-    lat: 41.9027835,
-    lng: 12.4963655,
+    lat: null,
+    lng: null,
+    error: "",
   });
 
   useEffect(() => {
@@ -51,10 +54,10 @@ const Map = () => {
     setIsOpen(false);
     setTimeout(() => {
       if (title) {
-        map.panTo({ lat, lng });
+        map.panTo({ lat, lng, duration: 1000 });
         setInfoWindowData({ id, title, address, photo });
         setIsOpen(true);
-        setZoom(14);
+        setZoom(13);
         setStartPosition({ lat, lng });
       }
     }, 70);
@@ -72,6 +75,7 @@ const Map = () => {
             address: address,
             lat: result.geometry.location.lat(),
             lng: result.geometry.location.lng(),
+            error: "",
           };
 
           setStartPosition(newSearchResult);
@@ -79,7 +83,13 @@ const Map = () => {
 
           setStartSearch(true);
         } else {
-          console.error("Nessun risultato trovato per la query di ricerca");
+          const newSearchResult = {
+            address: "",
+            lat: null,
+            lng: null,
+            error: "Location not found",
+          };
+          setSearchResult(newSearchResult);
         }
       });
     }
@@ -88,25 +98,14 @@ const Map = () => {
   return (
     <>
       <div className="colMap">
-        <div style={{ position: "absolute", zIndex: "100" }}>
-          <input
-            type="text"
-            placeholder="Cerca luogo..."
-            value={searchQuery}
-            onChange={(e) => {
-              setStartSearch(false);
-              setSearchQuery(e.target.value);
-            }}
-          />
-          <button onClick={handleSearch}>Cerca</button>
-          {searchResult && (
-            <div>
-              <h2>Risultato della ricerca:</h2>
-              <p>{searchResult.address}</p>
-            </div>
-          )}
-        </div>
-
+        <Search
+          searchQuery={searchQuery}
+          setStartSearch={setStartSearch}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+          searchResult={searchResult}
+        />
+        <Info/>
         {!isLoaded ? (
           <h1>Loading...</h1>
         ) : (
@@ -120,9 +119,7 @@ const Map = () => {
             {map && searchQuery && startSearch && searchResult.lat !== null && (
               <Marker
                 position={{ lat: searchResult.lat, lng: searchResult.lng }}
-                onClick={() => {
-                  // Gestisci l'apertura dell'InfoWindow o altri dettagli del marker
-                }}
+                onClick={() => {}}
               />
             )}
 
@@ -145,10 +142,24 @@ const Map = () => {
                           setInfoWindowData();
                         }}
                       >
-                        <>
-                          <h3>{infoWindowData.title}</h3>
-                          <h3>{infoWindowData.address}</h3>
-                        </>
+                        <div className="cardTooltip">
+                          <div className="imgContanier">
+                            <img
+                              src={infoWindowData.photo}
+                              alt={infoWindowData.title}
+                              className="img"
+                            />
+                          </div>
+                          <div className="textContanier">
+                            <div className="tooltipTitle">
+                              {infoWindowData.title}
+                            </div>
+                            <div className="tooltipAddress">
+                              <strong>Address: </strong>
+                              {infoWindowData.address}
+                            </div>
+                          </div>
+                        </div>
                       </InfoWindow>
                     )}
                 </Marker>
