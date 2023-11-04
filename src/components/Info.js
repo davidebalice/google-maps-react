@@ -4,8 +4,9 @@ import github from "../assets/img/github2.png";
 const Info = () => {
   return (
     <div className="infoContainer">
-      React implemetation of Google Maps Api with search function. Click to
-      accommodations to discover position on map.
+      React implemetation of Google Maps Api with search function.
+      <br />
+      Click to accommodations to discover position on map.
       <br />
       <a
         href="https://github.com/davidebalice/google-maps-react"

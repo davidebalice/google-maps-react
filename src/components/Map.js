@@ -44,7 +44,8 @@ const Map = () => {
           /*
           const bounds = new window.google.maps.LatLngBounds();
           markers.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
-          map.fitBounds(bounds);*/
+          map.fitBounds(bounds);
+          */
         }, 700);
       });
     }
@@ -105,7 +106,7 @@ const Map = () => {
           handleSearch={handleSearch}
           searchResult={searchResult}
         />
-        <Info/>
+        <Info />
         {!isLoaded ? (
           <h1>Loading...</h1>
         ) : (
