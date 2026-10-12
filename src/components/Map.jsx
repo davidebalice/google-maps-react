@@ -13,7 +13,7 @@ import { markers } from "../data/markers";
 
 const Map = () => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   });
   const [map, setMap] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
